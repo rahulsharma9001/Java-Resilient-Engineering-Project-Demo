@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: resilience-demo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 2
+
+  retry:
+    instances:
+      paymentService:
+        maxAttempts: 3
+        waitDuration: 1s
+
+  timelimiter:
+    instances:
+      paymentService:
+        timeoutDuration: 2s
