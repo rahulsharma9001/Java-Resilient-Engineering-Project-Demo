@@ -18,7 +18,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/place")
-    public CompletableFuture<OrderResponse> placeOrder(@RequestBody OrderRequest request) {
+    public OrderResponse placeOrder(@RequestBody OrderRequest request) {
         return orderService.placeOrder(request);
     }
 }
