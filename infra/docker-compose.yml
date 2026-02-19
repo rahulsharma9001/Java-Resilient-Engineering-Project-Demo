@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  order-service:
+    build:
+      context: ../resilience
+      dockerfile: Dockerfile
+    image: resilience-order-service:local
+    environment:
+      PAYMENT_SERVICE_URL: http://payment-service:8081
+    ports:
+      - "8080:8080"
+    depends_on:
+      - payment-service
+
+  payment-service:
+    build:
+      context: ../services/payment-service
+      dockerfile: Dockerfile
+    image: resilience-payment-service:local
+    ports:
+      - "8081:8081"
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - order-service
+      - payment-service
+
+  grafana:
+    image: grafana/grafana:11.2.2
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
