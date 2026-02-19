@@ -1,0 +1,20 @@
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: payment-pod-delete
+  namespace: default
+spec:
+  appinfo:
+    appns: default
+    applabel: app=payment-service
+    appkind: deployment
+  chaosServiceAccount: litmus-admin
+  experiments:
+    - name: pod-delete
+      spec:
+        components:
+          env:
+            - name: TOTAL_CHAOS_DURATION
+              value: "60"
+            - name: FORCE
+              value: "false"

@@ -3,13 +3,19 @@ server:
 
 spring:
   application:
-    name: resilience-demo
+    name: order-service
 
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info,prometheus,metrics,circuitbreakers,circuitbreakerevents
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 resilience4j:
   circuitbreaker:
@@ -20,14 +26,32 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
         permittedNumberOfCallsInHalfOpenState: 2
+        minimumNumberOfCalls: 3
 
   retry:
     instances:
       paymentService:
         maxAttempts: 3
-        waitDuration: 1s
+        waitDuration: 500ms
 
   timelimiter:
     instances:
       paymentService:
-        timeoutDuration: 2s
+        timeoutDuration: 1500ms
+
+  ratelimiter:
+    instances:
+      paymentService:
+        limitRefreshPeriod: 1s
+        limitForPeriod: 5
+        timeoutDuration: 0
+
+  bulkhead:
+    instances:
+      paymentService:
+        maxConcurrentCalls: 4
+        maxWaitDuration: 0
+
+payment:
+  service:
+    url: ${PAYMENT_SERVICE_URL:http://localhost:8081}

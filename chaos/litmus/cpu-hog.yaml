@@ -1,0 +1,20 @@
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: payment-cpu-hog
+  namespace: default
+spec:
+  appinfo:
+    appns: default
+    applabel: app=payment-service
+    appkind: deployment
+  chaosServiceAccount: litmus-admin
+  experiments:
+    - name: pod-cpu-hog
+      spec:
+        components:
+          env:
+            - name: CPU_CORES
+              value: "1"
+            - name: TOTAL_CHAOS_DURATION
+              value: "60"

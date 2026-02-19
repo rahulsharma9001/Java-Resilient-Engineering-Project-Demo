@@ -1,0 +1,11 @@
+# Local Maven cache used by scripts/run-local.sh
+.m2/
+
+# Root-level editor settings
+.vscode/
+.idea/
+
+# Common local/runtime noise
+*.log
+.env
+.env.*
