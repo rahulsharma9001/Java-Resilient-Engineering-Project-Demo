@@ -16,6 +16,7 @@ Expected: `APPROVED`
 ## 3. Inject controlled app failure
 ```bash
 curl -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"ALWAYS_FAIL"}'
 ```
@@ -24,6 +25,7 @@ Call order endpoint again. Expected: `PENDING` fallback response.
 ## 4. Inject latency
 ```bash
 curl -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"DELAY","delayMs":3000}'
 ```
@@ -32,6 +34,7 @@ Expected: `TimeLimiter` fallback starts triggering.
 ## 5. Random failures + retries
 ```bash
 curl -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"RANDOM_FAIL","failurePercent":60}'
 ./scripts/run-load-test.sh 40

@@ -1,1 +1,3 @@
 com/demo/payment/PaymentServiceApplicationTests.class
+com/demo/payment/controller/PaymentControllerSecurityAndValidationTest.class
+com/demo/payment/service/PaymentFailureServiceTest.class

@@ -1,4 +1,6 @@
 /home/nashtech/Resilience-Engineering/services/payment-service/src/main/java/com/demo/payment/PaymentServiceApplication.java
+/home/nashtech/Resilience-Engineering/services/payment-service/src/main/java/com/demo/payment/config/AsyncConfig.java
+/home/nashtech/Resilience-Engineering/services/payment-service/src/main/java/com/demo/payment/config/SecurityConfig.java
 /home/nashtech/Resilience-Engineering/services/payment-service/src/main/java/com/demo/payment/controller/PaymentController.java
 /home/nashtech/Resilience-Engineering/services/payment-service/src/main/java/com/demo/payment/controller/PaymentErrorHandler.java
 /home/nashtech/Resilience-Engineering/services/payment-service/src/main/java/com/demo/payment/model/FailureMode.java

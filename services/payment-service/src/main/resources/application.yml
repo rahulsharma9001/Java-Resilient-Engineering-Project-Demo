@@ -16,3 +16,8 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+payment:
+  admin:
+    username: ${PAYMENT_ADMIN_USERNAME:payment-admin}
+    password: ${PAYMENT_ADMIN_PASSWORD:change-this-password}
