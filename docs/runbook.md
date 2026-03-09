@@ -39,11 +39,15 @@ This builds and starts:
 - Prometheus: `http://localhost:9090`
 - Grafana: `http://localhost:3000` (`admin/admin`)
 
+Payment mode admin credentials (can be overridden with env vars `PAYMENT_ADMIN_USERNAME` and `PAYMENT_ADMIN_PASSWORD`):
+- Default username: `payment-admin`
+- Default password: `change-this-password`
+
 ## 4. Component health check
 
 ### 4.1 Check payment mode
 ```bash
-curl -s http://localhost:8081/payment/mode
+curl -s -u payment-admin:change-this-password http://localhost:8081/payment/mode
 ```
 Expected: mode is `NORMAL`.
 
@@ -77,6 +81,7 @@ Show graceful degradation (fallback).
 
 ```bash
 curl -s -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"ALWAYS_FAIL"}'
 
@@ -95,6 +100,7 @@ Show timeout handling.
 
 ```bash
 curl -s -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"DELAY","delayMs":3000}'
 
@@ -113,6 +119,7 @@ Show retry behavior under unstable dependency.
 
 ```bash
 curl -s -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"RANDOM_FAIL","failurePercent":60}'
 
@@ -171,6 +178,7 @@ What to explain:
 Set payment back to normal:
 ```bash
 curl -s -X POST http://localhost:8081/payment/mode \
+  -u payment-admin:change-this-password \
   -H 'Content-Type: application/json' \
   -d '{"mode":"NORMAL","delayMs":0,"failurePercent":0}'
 ```
@@ -200,14 +208,14 @@ Stop local stack:
 
 curl -s -X POST http://localhost:8080/order/place -H 'Content-Type: application/json' -d '{"orderId":"ORD-1001","amount":"100"}'
 
-curl -s -X POST http://localhost:8081/payment/mode -H 'Content-Type: application/json' -d '{"mode":"ALWAYS_FAIL"}'
+curl -s -X POST http://localhost:8081/payment/mode -u payment-admin:change-this-password -H 'Content-Type: application/json' -d '{"mode":"ALWAYS_FAIL"}'
 curl -s -X POST http://localhost:8080/order/place -H 'Content-Type: application/json' -d '{"orderId":"ORD-1002","amount":"200"}'
 
-curl -s -X POST http://localhost:8081/payment/mode -H 'Content-Type: application/json' -d '{"mode":"DELAY","delayMs":3000}'
+curl -s -X POST http://localhost:8081/payment/mode -u payment-admin:change-this-password -H 'Content-Type: application/json' -d '{"mode":"DELAY","delayMs":3000}'
 curl -s -X POST http://localhost:8080/order/place -H 'Content-Type: application/json' -d '{"orderId":"ORD-1003","amount":"300"}'
 
-curl -s -X POST http://localhost:8081/payment/mode -H 'Content-Type: application/json' -d '{"mode":"RANDOM_FAIL","failurePercent":60}'
+curl -s -X POST http://localhost:8081/payment/mode -u payment-admin:change-this-password -H 'Content-Type: application/json' -d '{"mode":"RANDOM_FAIL","failurePercent":60}'
 ./scripts/run-load-test.sh 40
 
-curl -s -X POST http://localhost:8081/payment/mode -H 'Content-Type: application/json' -d '{"mode":"NORMAL","delayMs":0,"failurePercent":0}'
+curl -s -X POST http://localhost:8081/payment/mode -u payment-admin:change-this-password -H 'Content-Type: application/json' -d '{"mode":"NORMAL","delayMs":0,"failurePercent":0}'
 ```
