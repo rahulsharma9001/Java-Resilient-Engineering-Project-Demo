@@ -2,10 +2,10 @@ apiVersion: litmuschaos.io/v1alpha1
 kind: ChaosEngine
 metadata:
   name: payment-network-latency
-  namespace: default
+  namespace: resilience-demo
 spec:
   appinfo:
-    appns: default
+    appns: resilience-demo
     applabel: app=payment-service
     appkind: deployment
   chaosServiceAccount: litmus-admin

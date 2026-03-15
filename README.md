@@ -21,6 +21,7 @@ This repository provides an end-to-end resilience demo with:
 
 ## Demo Docs
 - Postman request-by-request guide: `docs/postman-request-guide.md`
+- Litmus on Kubernetes end-to-end guide: `docs/litmus-kubernetes-e2e.md`
 
 ## Useful Endpoints
 - `POST /order/place`: `http://localhost:8080/order/place`

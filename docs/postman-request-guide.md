@@ -202,6 +202,14 @@ Create one folder and keep this exact order:
 8. `08 - Check Current Payment Mode`
 9. `09 - Reset Payment Mode: NORMAL`
 
+## How to present in session (using these requests)
+1. Run `01` and say: "Healthy dependency gives APPROVED."
+2. Run `02` then `03` and say: "Failure is isolated; user gets controlled PENDING."
+3. Run `04` then `05` and say: "Timeout path protects user latency."
+4. Run `06` then run `07` multiple times and say: "Intermittent failures are mitigated by retry + fallback."
+5. Run `08` to prove active mode configuration during discussion.
+6. Run `09` at the end and say: "System restored to normal."
+
 ## Quick troubleshooting
 - If `02/04/06/08/09` return `401`, re-check Basic Auth credentials.
 - If `07` keeps returning `PENDING`, run multiple times and wait 10-15 seconds for breaker recovery window.

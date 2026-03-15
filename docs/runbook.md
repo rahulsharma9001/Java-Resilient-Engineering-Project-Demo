@@ -165,6 +165,8 @@ Show:
 Run only if Kubernetes + Litmus are ready.
 
 ```bash
+./scripts/run-k8s.sh
+./scripts/setup-litmus.sh
 ./scripts/run-chaos.sh pod-delete
 ./scripts/run-chaos.sh network-latency
 ./scripts/run-chaos.sh cpu-hog
@@ -173,6 +175,7 @@ Run only if Kubernetes + Litmus are ready.
 What to explain:
 - These are infrastructure-level disruptions.
 - Resilience patterns should still keep user-facing API stable.
+- Full setup details are documented in `docs/litmus-kubernetes-e2e.md`.
 
 ## 8. Recovery and rollback
 Set payment back to normal:
@@ -185,7 +188,8 @@ curl -s -X POST http://localhost:8081/payment/mode \
 
 (Optional) remove chaos resources:
 ```bash
-kubectl delete chaosengine --all -n default
+kubectl delete chaosengine --all -n resilience-demo
+kubectl delete chaosresult --all -n resilience-demo
 ```
 
 Stop local stack:
@@ -201,6 +205,16 @@ Stop local stack:
 - 13-16 min: show random failures + load script
 - 16-20 min: show Prometheus/Grafana evidence
 - Optional extension: Kubernetes chaos experiments
+
+## 9.1 Presenter script (simple speaking lines)
+1. Intro: "This demo shows how the system stays available during failures."
+2. Normal flow: "With healthy dependency, order is APPROVED."
+3. Always fail: "Dependency fails, but API still responds with controlled fallback."
+4. Delay: "Slow dependency is handled by timeout and fallback."
+5. Random fail: "Retries recover some calls; remaining failures return fallback safely."
+6. Metrics: "Dashboards prove the resilience behavior live."
+7. Litmus optional: "Now we inject infra-level chaos and verify the same stability pattern."
+8. Closing: "Reset mode to NORMAL and clean all chaos resources."
 
 ## 10. Quick command bundle (copy/paste)
 ```bash

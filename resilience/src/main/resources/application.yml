@@ -6,6 +6,7 @@ spring:
     name: order-service
 
 management:
+  # Expose actuator + resilience endpoints for demo and observability.
   endpoints:
     web:
       exposure:
@@ -18,6 +19,9 @@ management:
       application: ${spring.application.name}
 
 resilience4j:
+  # Used by @CircuitBreaker(name = "paymentService")
+  # Opens when failure rate crosses threshold in recent call window.
+  # "If too many failures happen, stop calling payment for some time and return fallback immediately."
   circuitbreaker:
     instances:
       paymentService:
@@ -28,17 +32,26 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 2
         minimumNumberOfCalls: 3
 
+  # Used by @Retry(name = "paymentService")
+  # Retries transient failures before fallback.
+  # "If payment fails, try again a few times before fallback."
   retry:
     instances:
       paymentService:
         maxAttempts: 3
         waitDuration: 500ms
 
+  # Used by @TimeLimiter(name = "paymentService")
+  # Timeout boundary for downstream payment call.
+  # "If payment takes too long, stop waiting and go to fallback."
   timelimiter:
     instances:
       paymentService:
         timeoutDuration: 1500ms
 
+  # Used by @RateLimiter(name = "paymentService")
+  # Limits request rate to protect downstream service during spikes.
+  # "Allow only limited calls per second to protect payment-service."
   ratelimiter:
     instances:
       paymentService:
@@ -46,6 +59,9 @@ resilience4j:
         limitForPeriod: 5
         timeoutDuration: 0
 
+  # Used by @Bulkhead(name = "paymentService")
+  # Limits concurrent payment calls so resources are not exhausted.
+  # "Allow only limited concurrent calls so one slow dependency doesn't consume all resources."
   bulkhead:
     instances:
       paymentService:
@@ -54,4 +70,5 @@ resilience4j:
 
 payment:
   service:
+    # Downstream dependency URL (overridden in Docker/Kubernetes via env var).
     url: ${PAYMENT_SERVICE_URL:http://localhost:8081}
